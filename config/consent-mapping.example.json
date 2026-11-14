@@ -1,0 +1,160 @@
+{
+  "version": 1,
+  "description": "Example mapping from consent-banner categories to HubSpot compliance properties. Provider shapes are illustrative; confirm field paths and values against the payloads your consent platform (or your relay) actually sends.",
+  "canonical_categories": ["necessary", "functional", "analytics", "marketing", "sale_sharing"],
+  "hubspot_properties": {
+    "necessary": "consent_necessary",
+    "functional": "consent_functional",
+    "analytics": "consent_analytics",
+    "marketing": "consent_marketing",
+    "sale_sharing": "ccpa_sale_sharing_allowed",
+    "do_not_sell": "ccpa_do_not_sell_or_share",
+    "jurisdiction": "privacy_jurisdiction",
+    "consent_model": "privacy_consent_model",
+    "gpc": "privacy_gpc_signal",
+    "processing_restricted": "privacy_processing_restricted",
+    "last_updated": "consent_last_updated",
+    "source": "consent_source",
+    "receipt_id": "consent_receipt_id",
+    "policy_version": "consent_policy_version"
+  },
+  "providers": {
+    "custom": {
+      "paths": {
+        "event_id": "event_id",
+        "email": "subject.email",
+        "occurred_at": "occurred_at",
+        "country": "subject.country",
+        "region": "subject.region",
+        "receipt_id": "receipt_id",
+        "policy_version": "policy_version",
+        "gpc": "signals.gpc",
+        "do_not_sell": "signals.do_not_sell",
+        "unsubscribe_all": "signals.unsubscribe_all",
+        "restrict_processing": "signals.restrict_processing",
+        "email_marketing_opt_in": "signals.email_marketing_opt_in"
+      },
+      "categories": {
+        "path": "consents",
+        "format": "object",
+        "aliases": {
+          "necessary": "necessary",
+          "functional": "functional",
+          "analytics": "analytics",
+          "marketing": "marketing",
+          "sale_sharing": "sale_sharing"
+        }
+      },
+      "granted_values": [true, "true", "granted", "opt_in"],
+      "denied_values": [false, "false", "denied", "opt_out"]
+    },
+    "onetrust": {
+      "paths": {
+        "event_id": "receipt.id",
+        "email": "receipt.identifier",
+        "occurred_at": "receipt.consentCreationDate",
+        "country": "geolocation.country",
+        "region": "geolocation.state",
+        "receipt_id": "receipt.id",
+        "policy_version": "receipt.policyVersion",
+        "gpc": "receipt.gpcSignal"
+      },
+      "categories": {
+        "path": "purposes",
+        "format": "array",
+        "key_field": "Id",
+        "value_field": "TransactionType",
+        "aliases": {
+          "C0001": "necessary",
+          "C0002": "analytics",
+          "C0003": "functional",
+          "C0004": "marketing",
+          "C0005": "marketing",
+          "SSPD_BG": "sale_sharing"
+        }
+      },
+      "granted_values": ["CONFIRMED", "OPT_IN", "ACCEPTED"],
+      "denied_values": ["WITHDRAWN", "NOT_GIVEN", "OPT_OUT", "EXPIRED", "REJECTED"]
+    },
+    "cookiebot": {
+      "paths": {
+        "event_id": "consentid",
+        "email": "email",
+        "occurred_at": "utc",
+        "country": "country",
+        "receipt_id": "consentid"
+      },
+      "categories": {
+        "path": "consent",
+        "format": "object",
+        "ignore_keys": ["method", "stamp"],
+        "aliases": {
+          "necessary": "necessary",
+          "preferences": "functional",
+          "statistics": "analytics",
+          "marketing": "marketing"
+        }
+      },
+      "granted_values": [true, "true"],
+      "denied_values": [false, "false"]
+    },
+    "osano": {
+      "paths": {
+        "event_id": "consentId",
+        "email": "email",
+        "occurred_at": "timestamp",
+        "country": "country",
+        "region": "subdivision",
+        "receipt_id": "consentId",
+        "gpc": "gpc"
+      },
+      "categories": {
+        "path": "categories",
+        "format": "object",
+        "aliases": {
+          "ESSENTIAL": "necessary",
+          "PERSONALIZATION": "functional",
+          "ANALYTICS": "analytics",
+          "MARKETING": "marketing",
+          "OPT_OUT": { "category": "sale_sharing", "invert": true }
+        }
+      },
+      "granted_values": ["ACCEPT"],
+      "denied_values": ["DENY"]
+    }
+  },
+  "jurisdictions": {
+    "GDPR": {
+      "model": "opt_in",
+      "countries": ["AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH"]
+    },
+    "CCPA": {
+      "model": "opt_out",
+      "countries": ["US"],
+      "regions": ["CA"]
+    },
+    "US_STATE_PRIVACY": {
+      "model": "opt_out",
+      "countries": ["US"],
+      "regions": ["CO", "CT", "VA", "UT", "TX", "OR", "MT"],
+      "note": "Example list only. Maintain the states that apply to you with your counsel."
+    },
+    "OTHER": {
+      "model": "opt_in"
+    }
+  },
+  "subscriptions": {
+    "marketing_subscription_ids": ["your_marketing_subscription_type_id_here"],
+    "legal_basis": "CONSENT_WITH_NOTICE",
+    "legal_basis_explanation": "Contact withdrew marketing consent through the website consent preference center."
+  },
+  "rules": {
+    "unsubscribe_marketing_on_denial": true,
+    "global_unsubscribe_on_full_withdrawal": true,
+    "global_unsubscribe_on_explicit_request": true,
+    "restrict_processing_on_request": true,
+    "restrict_processing_on_full_withdrawal_gdpr": false,
+    "honor_gpc_as_do_not_sell": true,
+    "review_ticket_on": ["processing_restricted", "global_unsubscribe"]
+  }
+}
