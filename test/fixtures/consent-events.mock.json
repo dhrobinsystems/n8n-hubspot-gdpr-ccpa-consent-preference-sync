@@ -1,0 +1,351 @@
+{
+  "_meta": {
+    "description": "Mocked consent webhooks from four consent platforms (custom, OneTrust-style, Cookiebot-style, Osano-style) plus recorded HubSpot responses. All emails, IDs, and receipts are fabricated; every domain is RFC 2606.",
+    "reference_now": "2026-11-14T16:00:00.000Z"
+  },
+  "events": [
+    {
+      "label": "gdpr-full-withdrawal-custom",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_1001",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_evt_1001",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "anna.example@example.org",
+          "country": "DE",
+          "region": null
+        },
+        "consents": {
+          "necessary": true,
+          "functional": false,
+          "analytics": false,
+          "marketing": false
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "gdpr-marketing-withdrawn-onetrust",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "onetrust",
+        "receipt": {
+          "id": "rcpt_ot_2002",
+          "identifier": "ben.example@example.org",
+          "consentCreationDate": "2026-11-14T15:31:00Z",
+          "policyVersion": "v7",
+          "gpcSignal": false
+        },
+        "geolocation": {
+          "country": "FR",
+          "state": null
+        },
+        "purposes": [
+          {
+            "Id": "C0001",
+            "TransactionType": "CONFIRMED"
+          },
+          {
+            "Id": "C0002",
+            "TransactionType": "CONFIRMED"
+          },
+          {
+            "Id": "C0003",
+            "TransactionType": "CONFIRMED"
+          },
+          {
+            "Id": "C0004",
+            "TransactionType": "WITHDRAWN"
+          },
+          {
+            "Id": "C0005",
+            "TransactionType": "CONFIRMED"
+          }
+        ]
+      }
+    },
+    {
+      "label": "gdpr-all-granted-cookiebot",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "cookiebot",
+        "consentid": "cb_3003",
+        "email": "carla.example@example.org",
+        "utc": 1794672000000,
+        "country": "de",
+        "consent": {
+          "necessary": true,
+          "preferences": true,
+          "statistics": true,
+          "marketing": true,
+          "method": "explicit"
+        }
+      }
+    },
+    {
+      "label": "ccpa-opt-out-with-gpc-osano",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "osano",
+        "consentId": "os_4004",
+        "email": "dev.example@example.net",
+        "timestamp": "2026-11-14T15:33:00Z",
+        "country": "US",
+        "subdivision": "CA",
+        "gpc": true,
+        "categories": {
+          "ESSENTIAL": "ACCEPT",
+          "ANALYTICS": "ACCEPT",
+          "MARKETING": "ACCEPT",
+          "PERSONALIZATION": "ACCEPT",
+          "OPT_OUT": "ACCEPT"
+        }
+      }
+    },
+    {
+      "label": "ccpa-gpc-only-custom",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_5005",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_evt_5005",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "eli.example@example.net",
+          "country": "US",
+          "region": "CA"
+        },
+        "consents": {
+          "necessary": true
+        },
+        "signals": {
+          "gpc": true,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "uk-restrict-processing-request",
+      "expected_status": "dry_run",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_6006",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_evt_6006",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "fay.example@example.org",
+          "country": "GB",
+          "region": null
+        },
+        "consents": {
+          "necessary": true,
+          "functional": true,
+          "analytics": true,
+          "marketing": false
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": true,
+          "restrict_processing": true,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "stale-out-of-order-event",
+      "expected_status": "skipped",
+      "expected_reason": "stale_event_older_than_stored_consent",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_7007",
+        "occurred_at": "2026-11-01T10:00:00Z",
+        "receipt_id": "rcpt_evt_7007",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "anna.example@example.org",
+          "country": "DE",
+          "region": null
+        },
+        "consents": {
+          "necessary": true,
+          "functional": true,
+          "analytics": true,
+          "marketing": true
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "duplicate-receipt-replay",
+      "expected_status": "skipped",
+      "expected_reason": "duplicate_receipt",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_8008",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_already_applied",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "gus.example@example.org",
+          "country": "IE",
+          "region": null
+        },
+        "consents": {
+          "necessary": true,
+          "functional": true,
+          "analytics": false,
+          "marketing": false
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "unknown-contact",
+      "expected_status": "skipped",
+      "expected_reason": "contact_not_found",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_9009",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_evt_9009",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "nobody.example@example.org",
+          "country": "NL",
+          "region": null
+        },
+        "consents": {
+          "necessary": true,
+          "marketing": false
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "invalid-missing-email",
+      "expected_status": "rejected",
+      "body": {
+        "provider": "custom",
+        "event_id": "evt_1010",
+        "occurred_at": "2026-11-14T15:30:00Z",
+        "receipt_id": "rcpt_evt_1010",
+        "policy_version": "2026-10",
+        "subject": {
+          "email": "",
+          "country": "DE",
+          "region": null
+        },
+        "consents": {
+          "necessary": true
+        },
+        "signals": {
+          "gpc": false,
+          "do_not_sell": false,
+          "unsubscribe_all": false,
+          "restrict_processing": false,
+          "email_marketing_opt_in": false
+        }
+      }
+    },
+    {
+      "label": "unknown-provider",
+      "expected_status": "rejected",
+      "body": {
+        "provider": "some_other_cmp",
+        "email": "x@example.org"
+      }
+    }
+  ],
+  "mock_responses": {
+    "account": {
+      "statusCode": 200,
+      "body": {
+        "portalId": 1001,
+        "accountType": "DEVELOPER_TEST",
+        "timeZone": "UTC"
+      }
+    },
+    "contacts": {
+      "anna.example@example.org": {
+        "id": "2001",
+        "properties": {
+          "email": "anna.example@example.org",
+          "consent_marketing": "true",
+          "consent_last_updated": "1794240000000"
+        }
+      },
+      "ben.example@example.org": {
+        "id": "2002",
+        "properties": {
+          "email": "ben.example@example.org"
+        }
+      },
+      "carla.example@example.org": {
+        "id": "2003",
+        "properties": {
+          "email": "carla.example@example.org"
+        }
+      },
+      "dev.example@example.net": {
+        "id": "2004",
+        "properties": {
+          "email": "dev.example@example.net"
+        }
+      },
+      "eli.example@example.net": {
+        "id": "2005",
+        "properties": {
+          "email": "eli.example@example.net",
+          "consent_analytics": "false"
+        }
+      },
+      "fay.example@example.org": {
+        "id": "2006",
+        "properties": {
+          "email": "fay.example@example.org"
+        }
+      },
+      "gus.example@example.org": {
+        "id": "2007",
+        "properties": {
+          "email": "gus.example@example.org",
+          "consent_receipt_id": "rcpt_already_applied",
+          "consent_last_updated": "1794600000000"
+        }
+      }
+    }
+  }
+}
