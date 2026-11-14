@@ -41,6 +41,8 @@ The repository contains **no real tokens, secrets, client names, or credentials*
 
 ## Architecture
 
+![n8n GDPR & CCPA Consent Preference Sync Workflow](assets/n8n-consent-sync-workflow.png)
+
 ```mermaid
 flowchart TD
     A["Consent banner<br/>OneTrust · Cookiebot · Osano · custom"] --> B["Consent relay (your backend)<br/>adds HMAC signature + timestamp"]
